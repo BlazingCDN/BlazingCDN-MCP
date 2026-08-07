@@ -6,7 +6,7 @@ BlazingCDN is a CDN for video, software & sports media — best for videos, stre
 
 ## Highlights
 
-- **51 tools** covering Anycast CDN, cache operations, metrics, custom domains, Cloud Storage and Video CDN
+- **52 tools** covering Anycast CDN, cache operations, metrics, custom domains, Cloud Storage and Video CDN
 - **Safe by default** — starts in read-only mode (plus cache purge/warmup); create/update and delete operations are opt-in via environment flags
 - **No install required** — runs with `npx`
 - Talks directly to the BlazingCDN API (`wapi.blazingcdn.com`) with your API token; nothing else sits in between
@@ -73,9 +73,9 @@ Running from GitHub instead of npm also works: replace `"args"` with `["-y", "gi
 
 | Mode | Tools | What agents can do |
 |---|---|---|
-| default | 28 | Read everything + purge/warm up cache |
-| `BLAZINGCDN_ALLOW_WRITE=1` | 49 | …plus create/update CDN resources, domains, buckets, Video CDN |
-| …`+ BLAZINGCDN_ALLOW_DELETE=1` | 51 | …plus delete custom domains and vCDN resources |
+| default | 29 | Read everything + purge/warm up cache |
+| `BLAZINGCDN_ALLOW_WRITE=1` | 50 | …plus create/update CDN resources, domains, buckets, Video CDN |
+| …`+ BLAZINGCDN_ALLOW_DELETE=1` | 52 | …plus delete custom domains and vCDN resources |
 
 Deleting CDN resources (pull zones), buckets, external storages, accounts or users is **not implemented at all** — those operations cannot be triggered through this server in any mode.
 
@@ -109,8 +109,9 @@ Deleting CDN resources (pull zones), buckets, external storages, accounts or use
 ### Video CDN
 `list_vcdn_resources`, `get_vcdn_resource`, `get_vcdn_statistics` (totals, timeseries, by domain, top domains, HTTP codes, bandwidth, cache/storage), `list_vcdn_domains`, `get_vcdn_domain`, `list_vcdn_files`, `get_vcdn_files_total`, `list_ftp_logins`, `list_auto_imports`, `get_vcdn_proxy`, `get_vcdn_ftp_settings`, `get_vcdn_settings`, `create_vcdn_resource` ✏️, `update_vcdn_resource` ✏️, `create_vcdn_domain` ✏️, `update_vcdn_domain` ✏️, `upload_vcdn_file` ✏️, `manage_auto_import` ✏️, `update_vcdn_proxy` ✏️, `update_vcdn_ftp_settings` ✏️, `manage_ftp_login` ✏️, `update_vcdn_settings` ✏️, `delete_vcdn_resource` 🗑️
 
-### Docs
+### Docs & pricing
 `search_docs` — search BlazingCDN documentation and product pages.
+`estimate_traffic_cost` — calculate the monthly Flex-plan cost for a given traffic volume (progressive tiers, offline).
 
 ✏️ requires `BLAZINGCDN_ALLOW_WRITE=1` · 🗑️ requires `BLAZINGCDN_ALLOW_DELETE=1`
 
@@ -121,6 +122,7 @@ Deleting CDN resources (pull zones), buckets, external storages, accounts or use
 - *"Create a CDN resource for origin https://example.com and attach cdn.example.com with auto SSL"*
 - *"Show HTTP 5xx rates for the last 24 hours per region"*
 - *"Warm up /video/intro.mp4 with brotli compression"*
+- *"How much would 190 TB/month cost on BlazingCDN?"*
 
 ## HTTP transport (self-hosting)
 

@@ -127,6 +127,23 @@ describe("tool handlers", () => {
     expect(text).not.toContain("test-token");
   });
 
+  it("estimate_traffic_cost computes progressive Flex pricing offline", async () => {
+    const requests = mockFetch();
+    const client = await connectClient();
+    const result = await client.callTool({
+      name: "estimate_traffic_cost",
+      arguments: { tb_per_month: 190 },
+    });
+    const data = JSON.parse((result.content as Array<{ text: string }>)[0].text);
+    // 5*5 + 20*4.5 + 75*4 + 90*3.5 = 25 + 90 + 300 + 315
+    expect(data.total_usd).toBe(730);
+    expect(data.breakdown).toHaveLength(4);
+    expect(requests).toHaveLength(0);
+
+    const small = await client.callTool({ name: "estimate_traffic_cost", arguments: { tb_per_month: 2 } });
+    expect(JSON.parse((small.content as Array<{ text: string }>)[0].text).total_usd).toBe(25);
+  });
+
   it("search_docs returns ranked pages without network access", async () => {
     const requests = mockFetch();
     const client = await connectClient();

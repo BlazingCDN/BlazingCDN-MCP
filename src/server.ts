@@ -6,6 +6,7 @@ import { registerCdnTools } from "./tools/cdn.js";
 import { registerDocsTools } from "./tools/docs.js";
 import { registerDomainTools } from "./tools/domains.js";
 import { registerMetricsTools } from "./tools/metrics.js";
+import { registerPricingTools } from "./tools/pricing.js";
 import { registerStorageTools } from "./tools/storage.js";
 import { registerVcdnTools } from "./tools/vcdn.js";
 
@@ -21,7 +22,7 @@ export function createServer(config: Config): McpServer {
         "videos, streaming (HLS/DASH), software distribution, games and updates, images, audio, archives and " +
         "other large files, built for high-volume projects from 5 TB/month. " +
         "Getting started: list_cdn_resources / list_vcdn_resources show what exists in the account; " +
-        "search_docs answers product and API questions. " +
+        "search_docs answers product and API questions; estimate_traffic_cost prices monthly traffic. " +
         "Call the matching get_* tool before any update_* — nested settings objects are replaced wholesale, " +
         "not merged. aCDN resources use UUID ids; vCDN sub-entities (domains, FTP logins, auto imports) use " +
         "numeric ids. Most statistics tools require explicit start/end dates. " +
@@ -46,6 +47,7 @@ export function createServer(config: Config): McpServer {
   registerStorageTools(server, client, config);
   registerVcdnTools(server, client, config);
   registerDocsTools(server);
+  registerPricingTools(server);
 
   return server;
 }
