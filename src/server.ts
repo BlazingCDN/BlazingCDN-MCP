@@ -5,7 +5,6 @@ import { registerCacheTools } from "./tools/cache.js";
 import { registerCdnTools } from "./tools/cdn.js";
 import { registerDocsTools } from "./tools/docs.js";
 import { registerDomainTools } from "./tools/domains.js";
-import { registerLogTools } from "./tools/logs.js";
 import { registerMetricsTools } from "./tools/metrics.js";
 import { registerStorageTools } from "./tools/storage.js";
 import { registerVcdnTools } from "./tools/vcdn.js";
@@ -34,7 +33,6 @@ export function createServer(config: Config): McpServer {
   registerCacheTools(server, client);
   registerMetricsTools(server, client);
   registerDomainTools(server, client, config);
-  registerLogTools(server, client, config);
   registerStorageTools(server, client, config);
   registerVcdnTools(server, client, config);
   registerDocsTools(server);

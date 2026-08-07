@@ -8,7 +8,7 @@ const uuid = z.string().uuid();
 
 const externalStorageFields = {
   alias: z.string().describe("External storage alias"),
-  host: z.string().describe("Storage endpoint URL (S3-compatible)"),
+  host: z.string().describe("Storage endpoint as a full URL, e.g. 'https://s3.amazonaws.com' (S3-compatible)"),
   region: z.string().describe("Storage region"),
   bucket: z.string().describe("Bucket name on the external storage"),
   access_key_id: z.string().describe("Access key ID"),

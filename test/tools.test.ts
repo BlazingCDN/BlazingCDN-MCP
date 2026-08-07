@@ -74,28 +74,6 @@ describe("tool handlers", () => {
     expect(requests[0].body).toEqual({ domains: [{ name: "cdn.example.com" }] });
   });
 
-  it("set_raw_logs_settings maps resource_ids to pull_zone_ids", async () => {
-    const requests = mockFetch();
-    const client = await connectClient({ allowWrite: true });
-    await client.callTool({
-      name: "set_raw_logs_settings",
-      arguments: {
-        resource_ids: [RID],
-        enabled: true,
-        destination: "syslog",
-        time_sampling_enabled: false,
-        host: "logs.example.com",
-        port: 514,
-        facility: "local0",
-        severity: "info",
-      },
-    });
-    const body = requests[0].body as Record<string, unknown>;
-    expect(body.pull_zone_ids).toEqual([RID]);
-    expect(body.destination).toBe("syslog");
-    expect(body).not.toHaveProperty("resource_ids");
-  });
-
   it("get_vcdn_statistics routes reports to the right endpoints", async () => {
     const requests = mockFetch();
     const client = await connectClient();

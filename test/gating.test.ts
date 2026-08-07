@@ -26,7 +26,6 @@ describe("tool gating", () => {
 
     expect(names).not.toContain("create_cdn_resource");
     expect(names).not.toContain("update_cdn_resource");
-    expect(names).not.toContain("set_raw_logs_settings");
     expect(names).not.toContain("delete_custom_domain");
     expect(names).not.toContain("delete_vcdn_resource");
   });

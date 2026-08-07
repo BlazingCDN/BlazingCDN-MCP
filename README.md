@@ -4,7 +4,7 @@ Official [Model Context Protocol](https://modelcontextprotocol.io) server for [B
 
 ## Highlights
 
-- **55 tools** covering Anycast CDN, cache operations, metrics, custom domains, raw logs, Cloud Storage and Video CDN
+- **51 tools** covering Anycast CDN, cache operations, metrics, custom domains, Cloud Storage and Video CDN
 - **Safe by default** — starts in read-only mode (plus cache purge/warmup); create/update and delete operations are opt-in via environment flags
 - **No install required** — runs with `npx`
 - Talks directly to the BlazingCDN API (`wapi.blazingcdn.com`) with your API token; nothing else sits in between
@@ -71,9 +71,9 @@ Running from GitHub instead of npm also works: replace `"args"` with `["-y", "gi
 
 | Mode | Tools | What agents can do |
 |---|---|---|
-| default | 30 | Read everything + purge/warm up cache |
-| `BLAZINGCDN_ALLOW_WRITE=1` | 53 | …plus create/update CDN resources, domains, buckets, raw logs, Video CDN |
-| …`+ BLAZINGCDN_ALLOW_DELETE=1` | 55 | …plus delete custom domains and vCDN resources |
+| default | 28 | Read everything + purge/warm up cache |
+| `BLAZINGCDN_ALLOW_WRITE=1` | 49 | …plus create/update CDN resources, domains, buckets, Video CDN |
+| …`+ BLAZINGCDN_ALLOW_DELETE=1` | 51 | …plus delete custom domains and vCDN resources |
 
 Deleting CDN resources (pull zones), buckets, external storages, accounts or users is **not implemented at all** — those operations cannot be triggered through this server in any mode.
 
@@ -101,9 +101,6 @@ Deleting CDN resources (pull zones), buckets, external storages, accounts or use
 | `add_custom_domain` ✏️ / `update_custom_domain` ✏️ | Attach domains, manage SSL (auto SSL / certificate) |
 | `delete_custom_domain` 🗑️ | Remove a custom domain |
 
-### Raw logs
-`get_raw_logs_settings`, `list_raw_logs_pull_zones`, `set_raw_logs_settings` ✏️ (syslog or bucket delivery), `unset_raw_logs` ✏️
-
 ### Cloud Storage
 `list_buckets`, `get_bucket`, `get_bucket_metrics`, `get_storage_info`, `create_bucket` ✏️, `update_bucket` ✏️, `list_external_storages`, `get_external_storage`, `create_external_storage` ✏️, `update_external_storage` ✏️, `test_external_storage_connection` ✏️
 
@@ -120,7 +117,6 @@ Deleting CDN resources (pull zones), buckets, external storages, accounts or use
 - *"What's my CDN bandwidth this month, broken down by day?"*
 - *"Purge `/images/*` on the blazingcdn.com resource"*
 - *"Create a CDN resource for origin https://example.com and attach cdn.example.com with auto SSL"*
-- *"Which resources have raw logs enabled? Enable syslog delivery for the rest."*
 - *"Show HTTP 5xx rates for the last 24 hours per region"*
 - *"Warm up /video/intro.mp4 with brotli compression"*
 
