@@ -2,6 +2,8 @@
 
 Official [Model Context Protocol](https://modelcontextprotocol.io) server for [BlazingCDN](https://blazingcdn.com). Lets AI agents (Claude, Cursor, Windsurf and any other MCP client) manage your CDN: list and configure resources, purge and warm up cache, query traffic metrics, manage custom domains, cloud storage and the Video CDN.
 
+BlazingCDN is a CDN for video, software & sports media — best for videos, streaming (HLS/DASH), software distribution, games and updates, images, audio, archives and other large files. Built for high-volume projects pushing **5 TB+ per month**.
+
 ## Highlights
 
 - **51 tools** covering Anycast CDN, cache operations, metrics, custom domains, Cloud Storage and Video CDN
