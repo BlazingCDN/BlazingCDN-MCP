@@ -7,6 +7,8 @@ import type { Config } from "../config.js";
 import { compact, DESTRUCTIVE, READ_ONLY, toolHandler, WRITE } from "./util.js";
 
 const uuid = z.string().uuid();
+// vCDN sub-entities (domains, FTP logins, auto imports) use numeric IDs, unlike vCDN resources (UUIDs)
+const numericId = z.union([z.number().int(), z.string()]);
 
 export function registerVcdnTools(server: McpServer, client: ApiClient, config: Config): void {
   server.registerTool(
@@ -45,7 +47,8 @@ export function registerVcdnTools(server: McpServer, client: ApiClient, config: 
         "'bandwidth' — account bandwidth (optional resource_id filter); " +
         "'cache_storage' — cache and storage usage; " +
         "'global_http_codes' — account-wide HTTP code stats. " +
-        "Dates in ISO format, e.g. '2026-08-01T00:00:00Z'.",
+        "Dates in ISO format, e.g. '2026-08-01T00:00:00Z'. start_date and end_date are REQUIRED " +
+        "for every report except monthly_totals.",
       inputSchema: {
         report: z.enum([
           "monthly_totals",
@@ -70,6 +73,9 @@ export function registerVcdnTools(server: McpServer, client: ApiClient, config: 
       const needsResource = ["monthly_totals", "timeseries", "by_domains", "top_domains", "http_codes"];
       if (needsResource.includes(report) && !resource_id) {
         throw new Error(`Report '${report}' requires resource_id.`);
+      }
+      if (report !== "monthly_totals" && (!start_date || !end_date)) {
+        throw new Error(`Report '${report}' requires start_date and end_date.`);
       }
       switch (report) {
         case "monthly_totals":
@@ -106,7 +112,7 @@ export function registerVcdnTools(server: McpServer, client: ApiClient, config: 
       description: "List Video CDN domains, optionally filtered by name or SSL certificate.",
       inputSchema: {
         domains: z.array(z.string()).optional().describe("Filter by domain names"),
-        ssl_certificate_ids: z.array(uuid).optional().describe("Filter by SSL certificate IDs"),
+        ssl_certificate_ids: z.array(numericId).optional().describe("Filter by SSL certificate IDs"),
       },
       annotations: READ_ONLY,
     },
@@ -118,7 +124,7 @@ export function registerVcdnTools(server: McpServer, client: ApiClient, config: 
     {
       title: "Get vCDN domain",
       description: "Get details of one Video CDN domain.",
-      inputSchema: { domain_id: uuid.describe("vCDN domain ID") },
+      inputSchema: { domain_id: numericId.describe("vCDN domain ID (numeric)") },
       annotations: READ_ONLY,
     },
     toolHandler(async (args) => client.get(`/api/v1/vcdn_domains/${args.domain_id}`)),
@@ -272,9 +278,10 @@ export function registerVcdnTools(server: McpServer, client: ApiClient, config: 
         title: "Update vCDN domain",
         description:
           "Update a Video CDN domain. Settings keys: secret_primary / secret_secondary (link signature secrets; " +
-          "'' to unset, null for default), ssl_certificate_id, auto_ssl, plus domain base parameters.",
+          "'' to unset, null for default; write-only — reads return them as true/false flags), " +
+          "ssl_certificate_id, auto_ssl, plus domain base parameters.",
         inputSchema: {
-          domain_id: uuid.describe("vCDN domain ID"),
+          domain_id: numericId.describe("vCDN domain ID (numeric)"),
           settings: z.object({}).passthrough().describe("Domain settings to change"),
         },
         annotations: WRITE,
@@ -286,7 +293,10 @@ export function registerVcdnTools(server: McpServer, client: ApiClient, config: 
       "upload_vcdn_file",
       {
         title: "Upload vCDN file",
-        description: "Upload a local file to a Video CDN resource.",
+        description:
+          "Upload a local file to a Video CDN resource. Files must be between 10 MB and 10 GB " +
+          "(the storage is video-oriented). Returns HTTP 202 — the file is processed asynchronously " +
+          "and appears in list_vcdn_files once processing completes.",
         inputSchema: {
           resource_id: uuid.describe("vCDN resource ID"),
           file_path: z.string().describe("Absolute path of the local file to upload"),
@@ -312,10 +322,11 @@ export function registerVcdnTools(server: McpServer, client: ApiClient, config: 
         description:
           "Create (omit auto_import_id) or update (pass auto_import_id) a content auto-import job of a vCDN resource. " +
           "Params: either bucket source (bucket_id/bucket_name, folder_name) or rsync source (rsync_url, fetch_url), " +
-          "plus callback_url, cut_folders and scan/fetch options.",
+          "plus callback_url, cut_folders and scan/fetch options. A bucket folder can feed only one resource — " +
+          "creating a second import for the same folder returns 422.",
         inputSchema: {
           resource_id: uuid.describe("vCDN resource ID"),
-          auto_import_id: uuid.optional().describe("Auto import ID (update if provided)"),
+          auto_import_id: numericId.optional().describe("Auto import ID (numeric; update if provided)"),
           params: z.object({}).passthrough().describe("Auto import parameters"),
         },
         annotations: WRITE,
@@ -372,7 +383,7 @@ export function registerVcdnTools(server: McpServer, client: ApiClient, config: 
         inputSchema: {
           resource_id: uuid.describe("vCDN resource ID"),
           action: z.enum(["create", "update", "enable", "disable"]),
-          ftp_login_id: uuid.optional().describe("FTP login ID (required for update/enable/disable)"),
+          ftp_login_id: numericId.optional().describe("FTP login ID (numeric; required for update/enable/disable)"),
           password: z.string().optional().describe("Password (required for create)"),
           folder: z.string().optional().describe("FTP folder, e.g. '/a/b'"),
           label: z.string().optional(),
@@ -413,7 +424,9 @@ export function registerVcdnTools(server: McpServer, client: ApiClient, config: 
         title: "Update vCDN default settings",
         description:
           "Update account-wide default Video CDN settings, including link signature secrets " +
-          "(secret_primary / secret_secondary) and fetch settings.",
+          "(secret_primary / secret_secondary) and fetch settings. WARNING: nested objects " +
+          "(e.g. fetch_ext.video) are replaced wholesale, not merged — call get_vcdn_settings first " +
+          "and send the complete object with your change applied.",
         inputSchema: {
           settings: z.object({}).passthrough().describe("Settings to change"),
         },

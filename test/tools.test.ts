@@ -97,6 +97,24 @@ describe("tool handlers", () => {
       arguments: { report: "timeseries" },
     });
     expect(missing.isError).toBe(true);
+
+    const noDates = await client.callTool({
+      name: "get_vcdn_statistics",
+      arguments: { report: "cache_storage" },
+    });
+    expect(noDates.isError).toBe(true);
+    expect((noDates.content as Array<{ text: string }>)[0].text).toContain("start_date");
+  });
+
+  it("manage_ftp_login accepts numeric IDs (vCDN sub-entities are not UUIDs)", async () => {
+    const requests = mockFetch();
+    const client = await connectClient({ allowWrite: true });
+    const result = await client.callTool({
+      name: "manage_ftp_login",
+      arguments: { resource_id: RID, action: "disable", ftp_login_id: 507533241 },
+    });
+    expect(result.isError).toBeFalsy();
+    expect(requests[0].url.pathname).toBe(`/api/v1/vcdn_resources/${RID}/ftp_logins/507533241/disable`);
   });
 
   it("API errors surface as isError results with the status code, not exceptions", async () => {
