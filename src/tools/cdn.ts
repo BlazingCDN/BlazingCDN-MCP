@@ -11,12 +11,15 @@ const settingsSchema = z
   .passthrough()
   .describe(
     "aCDN resource settings to change. Common keys: name, origin_url, source ('origin'|'storage'), " +
-      "active_ttl, use_active_ttl, browser_active_ttl, use_browser_active_ttl, inactive_ttl, default_ttl, " +
+      "proxy_cache (the 'Use CDN cache' master toggle) + proxy_buffering, " +
+      "active_ttl, use_active_ttl, browser_active_ttl, use_browser_active_ttl, inactive_ttl, " +
+      "default_ttl (TTL for HTTP codes not listed in custom_ttls), " +
       "custom_ttls (object mapping HTTP code to TTL seconds as INTEGERS, e.g. {\"200\": 172800}), cache_min_uses, " +
       "honor_response_ttl_headers, edge_compression, compression_methods (comma-separated 'gzip,br'; zstd may be unavailable), " +
       "origin_shield_enabled, origin_shield_type ('auto'|'custom'), shield_retest, shield_change_notify, " +
       "redirect_to_https, http2, cors, hsts, ssl, shared_ssl, " +
-      "hotlink_protection + hotlink_protection_type ('allow'|'block') + hotlink_domains (newline-separated; referrer access control), " +
+      "hotlink_protection + hotlink_protection_type ('allow'|'block') + hotlink_domains (newline-separated; referrer access control; " +
+      "related read fields: hotlink_allowed_domains, hotlink_blocked_domains, deny_none_referrers, deny_blocked_referrers), " +
       "country_protection_enabled + country_protection_type ('allow'|'block') + country_protection_list (ISO 3166 codes, e.g. ['BY','CN']), " +
       "ip_protection_enabled + ip_protection_type ('allow'|'block') + ip_protection_list (IP addresses), " +
       "securelink_enabled (must be set together with securelink_arg and securelink_value) + securelink_expiration/" +
@@ -31,7 +34,11 @@ const settingsSchema = z
       "per-playlist and per-chunk TTL keys (hls_playlist_*, hls_chunk_*), and the mpeg_dash_* equivalents " +
       "(mpeg_dash_chunk_ext as ARRAY, e.g. ['.mp4']). " +
       "Image processing: image_processing_enabled + image_processing_extensions (ARRAY with dots, e.g. ['.jpg','.png']; " +
-      "conflicts with truncate_url_params_ext; its TTLs must be 2-365 days — pass auto_resolve=true to let the API fix bounds).",
+      "conflicts with truncate_url_params_ext; its TTLs must be 2-365 days — pass auto_resolve=true to let the API fix bounds) " +
+      "plus its own cache family (image_processing_active_ttl/_browser_active_ttl/_custom_ttls/_default_ttl/_cache_min_uses/" +
+      "_proxy_cache/_proxy_buffering/_honor_response_ttl_headers). " +
+      "The live API accepts and returns more fields than the OpenAPI spec documents (e.g. dnssec, restricted_countries) — " +
+      "call get_cdn_resource to see everything (~147 fields); unknown keys pass through unchanged.",
   );
 
 export function registerCdnTools(server: McpServer, client: ApiClient, config: Config): void {
