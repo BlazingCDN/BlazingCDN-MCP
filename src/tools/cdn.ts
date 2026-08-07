@@ -133,7 +133,10 @@ export function registerCdnTools(server: McpServer, client: ApiClient, config: C
           "Update per-location (URL path) cache rules of an aCDN resource. Each location supports: id (to update existing), " +
           "url, modifier ('='|'~'|'~*'|'^~'), position, cache_enabled, active_ttl, browser_active_ttl, default_ttl, " +
           "custom_ttls, cache_min_uses, honor_response_ttl_headers, proxy_buffering, proxy_cache, deny_traffic, " +
-          "truncate_url_params, if_modified_since_enabled, if_modified_since, _destroy (true to remove the location). " +
+          "truncate_url_params, if_modified_since_enabled, if_modified_since, _destroy (true to remove the location), " +
+          "image_processing_enabled, image_processing_default_presets (object mapping preset name to an operation " +
+          "string, e.g. {\"resizefit\": \"resize:fit:$arg_width:$arg_height\", \"crop\": \"crop:$arg_width:$arg_height:$arg_gravity\"}; " +
+          "clients then request images as ?preset=resizefit&width=100&height=100 and the CDN transforms on the fly). " +
           "Note: the API rejects location management for resources in basic mode (409) — the resource must have " +
           "advanced/custom locations enabled.",
         inputSchema: {
