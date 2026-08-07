@@ -16,7 +16,9 @@ const settingsSchema = z
       "honor_response_ttl_headers, edge_compression, compression_methods (comma-separated 'gzip,br'; zstd may be unavailable), " +
       "origin_shield_enabled, origin_shield_type ('auto'|'custom'), shield_retest, shield_change_notify, " +
       "redirect_to_https, http2, cors, hsts, ssl, shared_ssl, " +
-      "hotlink_protection + hotlink_protection_type ('allow'|'block') + hotlink_domains (newline-separated), " +
+      "hotlink_protection + hotlink_protection_type ('allow'|'block') + hotlink_domains (newline-separated; referrer access control), " +
+      "country_protection_enabled + country_protection_type ('allow'|'block') + country_protection_list (ISO 3166 codes, e.g. ['BY','CN']), " +
+      "ip_protection_enabled + ip_protection_type ('allow'|'block') + ip_protection_list (IP addresses), " +
       "securelink_enabled (must be set together with securelink_arg and securelink_value) + securelink_expiration/" +
       "securelink_expiration_arg/securelink_addr, " +
       "truncate_url_params, truncate_url_params_ext (only when truncate_url_params is false), " +
