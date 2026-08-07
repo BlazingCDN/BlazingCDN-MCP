@@ -296,7 +296,9 @@ export function registerVcdnTools(server: McpServer, client: ApiClient, config: 
         description:
           "Upload a local file to a Video CDN resource. Files must be between 10 MB and 10 GB " +
           "(the storage is video-oriented). Returns HTTP 202 — the file is processed asynchronously " +
-          "and appears in list_vcdn_files once processing completes.",
+          "and appears in list_vcdn_files once processing completes (status 'active'). It is then " +
+          "served at https://<resource system_domain>/<filename> (the resource's www_folder is not " +
+          "part of the public URL) via a signed 302 redirect to an edge node.",
         inputSchema: {
           resource_id: uuid.describe("vCDN resource ID"),
           file_path: z.string().describe("Absolute path of the local file to upload"),
