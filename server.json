@@ -1,0 +1,38 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+  "name": "io.github.blazingcdn/blazingcdn-mcp",
+  "description": "Manage BlazingCDN from AI agents: CDN resources, cache purge/warmup, traffic metrics, custom domains, cloud storage and video CDN",
+  "version": "0.1.0",
+  "repository": {
+    "url": "https://github.com/BlazingCDN/BlazingCDN-MCP",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@blazingcdn/mcp",
+      "version": "0.1.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "BLAZINGCDN_API_TOKEN",
+          "description": "BlazingCDN API access token",
+          "isRequired": true,
+          "isSecret": true
+        },
+        {
+          "name": "BLAZINGCDN_ALLOW_WRITE",
+          "description": "Set to 1 to enable create/update tools",
+          "isRequired": false
+        },
+        {
+          "name": "BLAZINGCDN_ALLOW_DELETE",
+          "description": "Set to 1 to enable delete tools",
+          "isRequired": false
+        }
+      ]
+    }
+  ]
+}

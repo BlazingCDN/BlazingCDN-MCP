@@ -1,0 +1,55 @@
+{
+  "name": "@blazingcdn/mcp",
+  "version": "0.1.0",
+  "description": "Official BlazingCDN MCP server — manage CDN resources, purge cache, query metrics, cloud storage and video CDN from AI agents",
+  "type": "module",
+  "license": "MIT",
+  "author": "BlazingCDN <support@blazingcdn.com>",
+  "homepage": "https://github.com/BlazingCDN/BlazingCDN-MCP#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BlazingCDN/BlazingCDN-MCP.git"
+  },
+  "bugs": {
+    "url": "https://github.com/BlazingCDN/BlazingCDN-MCP/issues"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "blazingcdn",
+    "cdn",
+    "cache",
+    "ai",
+    "claude",
+    "llm"
+  ],
+  "bin": {
+    "blazingcdn-mcp": "dist/index.js"
+  },
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc && node scripts/postbuild.mjs",
+    "prepare": "npm run build",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vitest": "^3.0.0"
+  }
+}
