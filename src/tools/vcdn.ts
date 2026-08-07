@@ -279,7 +279,9 @@ export function registerVcdnTools(server: McpServer, client: ApiClient, config: 
         description:
           "Update a Video CDN domain. Settings keys: secret_primary / secret_secondary (link signature secrets; " +
           "'' to unset, null for default; write-only — reads return them as true/false flags), " +
-          "ssl_certificate_id, auto_ssl, plus domain base parameters.",
+          "ssl_certificate_id, auto_ssl, plus every account-default key (see update_vcdn_settings: force_https, " +
+          "default_speed, rate limits, referer, block_geo, http_headers, redirect_ttl, …) as a per-domain override. " +
+          "Set an override key to null to re-link it to the account default (the panel's 'linked to Defaults').",
         inputSchema: {
           domain_id: numericId.describe("vCDN domain ID (numeric)"),
           settings: z.object({}).passthrough().describe("Domain settings to change"),
@@ -324,8 +326,10 @@ export function registerVcdnTools(server: McpServer, client: ApiClient, config: 
         description:
           "Create (omit auto_import_id) or update (pass auto_import_id) a content auto-import job of a vCDN resource. " +
           "Params: either bucket source (bucket_id/bucket_name, folder_name) or rsync source (rsync_url, fetch_url), " +
-          "plus callback_url, cut_folders and scan/fetch options. A bucket folder can feed only one resource — " +
-          "creating a second import for the same folder returns 422.",
+          "plus callback_url, cut_folders ('scan strip folders'), scan_interval / scan_min_age (seconds), " +
+          "scan_exclude (array) and fetch options (fetch_ext, fetch_min_size, fetch_min_rate, fetch_sign_* — " +
+          "rsync sources only). A bucket folder can feed only one resource — creating a second import for the " +
+          "same folder returns 422.",
         inputSchema: {
           resource_id: uuid.describe("vCDN resource ID"),
           auto_import_id: numericId.optional().describe("Auto import ID (numeric; update if provided)"),
@@ -425,10 +429,20 @@ export function registerVcdnTools(server: McpServer, client: ApiClient, config: 
       {
         title: "Update vCDN default settings",
         description:
-          "Update account-wide default Video CDN settings, including link signature secrets " +
-          "(secret_primary / secret_secondary) and fetch settings. WARNING: nested objects " +
-          "(e.g. fetch_ext.video) are replaced wholesale, not merged — call get_vcdn_settings first " +
-          "and send the complete object with your change applied.",
+          "Update account-wide default Video CDN settings (all write-tested). " +
+          "General: force_https, check_url_signature + secret_primary/secret_secondary (ASCII 6-100 chars, '' to unset) + key_ttl, " +
+          "block_parameter ('ignore URL parameters': {ip, speed, buffer, initial_buffer, download, referer, media, secure_cookie}). " +
+          "File serving: http_headers, default_speed / default_download_speed / default_buffer / initial_buffer " +
+          "(objects {value, unit: '%'|'Kbps'}), redirect_ttl (Expires header TTL, seconds). " +
+          "Protection: check_referer + referer (array, '.domain.com' wildcards) + force_referer, " +
+          "block_geo (country map, keys stored lowercase, e.g. {\"by\": true}), encrypt_url, pass_googlebots, " +
+          "rate_limit_burst / rate_limit_interval / rate_limit_ipv4_mask (16-32) / rate_limit_ipv6_mask (16-128). " +
+          "Storage sync defaults: scan_interval / scan_min_age (seconds), scan_exclude (array), " +
+          "rescan_proxy_origin + rescan_proxy_origin_interval. " +
+          "Fetch: fetch_ext (video/audio/miscellaneous extension maps), fetch_min_size ({value, unit}), fetch_min_rate, " +
+          "fetch_sign_* and proxy_sign_* (method/key/ttl/securelink_argument), secure_cookie. " +
+          "WARNING: nested objects (e.g. fetch_ext.video) are replaced wholesale, not merged — call get_vcdn_settings " +
+          "first and send the complete object with your change applied.",
         inputSchema: {
           settings: z.object({}).passthrough().describe("Settings to change"),
         },
