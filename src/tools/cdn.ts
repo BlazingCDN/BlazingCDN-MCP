@@ -23,7 +23,9 @@ const settingsSchema = z
       "securelink_expiration_arg/securelink_addr, " +
       "truncate_url_params, truncate_url_params_ext (only when truncate_url_params is false), " +
       "allow_proxy_extensions + proxy_extensions (newline-separated with dots, e.g. '.mp4\\n.zip'), " +
-      "resolve_origin_ips, origin_ips, origin_ips_v6, if_modified_since ('off'|'exact'|'before'), " +
+      "resolve_origin_ips, origin_ips, origin_ips_v6, speed_test_fastest_ip + speed_test_path (origin IP prioritization " +
+      "by speed test), preferred_origin_ip_version ('v4'|'v6'), ipv6_enabled (serve over IPv6), origin_sni_enabled, " +
+      "if_modified_since ('off'|'exact'|'before'), " +
       "folder_name, bucket_id, external_storage_id. " +
       "Streaming: hls_support_enabled, hls_chunk_type ('common'|'specific'), hls_chunk_ext (ARRAY, e.g. ['.ts']), " +
       "per-playlist and per-chunk TTL keys (hls_playlist_*, hls_chunk_*), and the mpeg_dash_* equivalents " +
