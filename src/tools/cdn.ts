@@ -12,12 +12,22 @@ const settingsSchema = z
   .describe(
     "aCDN resource settings to change. Common keys: name, origin_url, source ('origin'|'storage'), " +
       "active_ttl, use_active_ttl, browser_active_ttl, use_browser_active_ttl, inactive_ttl, default_ttl, " +
-      "custom_ttls (object mapping HTTP code to TTL seconds, e.g. {\"200\": \"172800\"}), cache_min_uses, " +
-      "honor_response_ttl_headers, edge_compression, compression_methods ('gzip'|'br'|'zstd'), " +
-      "origin_shield_enabled, origin_shield_type ('auto'|'custom'), origin_shield_attributes, " +
-      "redirect_to_https, http2, cors, hsts, ssl, shared_ssl, hotlink_protection, hotlink_protection_type, " +
-      "hotlink_domains, truncate_url_params, proxy_extensions, allow_proxy_extensions, resolve_origin_ips, " +
-      "origin_ips, origin_ips_v6, folder_name, bucket_id, external_storage_id",
+      "custom_ttls (object mapping HTTP code to TTL seconds as INTEGERS, e.g. {\"200\": 172800}), cache_min_uses, " +
+      "honor_response_ttl_headers, edge_compression, compression_methods (comma-separated 'gzip,br'; zstd may be unavailable), " +
+      "origin_shield_enabled, origin_shield_type ('auto'|'custom'), shield_retest, shield_change_notify, " +
+      "redirect_to_https, http2, cors, hsts, ssl, shared_ssl, " +
+      "hotlink_protection + hotlink_protection_type ('allow'|'block') + hotlink_domains (newline-separated), " +
+      "securelink_enabled (must be set together with securelink_arg and securelink_value) + securelink_expiration/" +
+      "securelink_expiration_arg/securelink_addr, " +
+      "truncate_url_params, truncate_url_params_ext (only when truncate_url_params is false), " +
+      "allow_proxy_extensions + proxy_extensions (newline-separated with dots, e.g. '.mp4\\n.zip'), " +
+      "resolve_origin_ips, origin_ips, origin_ips_v6, if_modified_since ('off'|'exact'|'before'), " +
+      "folder_name, bucket_id, external_storage_id. " +
+      "Streaming: hls_support_enabled, hls_chunk_type ('common'|'specific'), hls_chunk_ext (ARRAY, e.g. ['.ts']), " +
+      "per-playlist and per-chunk TTL keys (hls_playlist_*, hls_chunk_*), and the mpeg_dash_* equivalents " +
+      "(mpeg_dash_chunk_ext as ARRAY, e.g. ['.mp4']). " +
+      "Image processing: image_processing_enabled + image_processing_extensions (ARRAY with dots, e.g. ['.jpg','.png']; " +
+      "conflicts with truncate_url_params_ext; its TTLs must be 2-365 days — pass auto_resolve=true to let the API fix bounds).",
   );
 
 export function registerCdnTools(server: McpServer, client: ApiClient, config: Config): void {
@@ -123,7 +133,9 @@ export function registerCdnTools(server: McpServer, client: ApiClient, config: C
           "Update per-location (URL path) cache rules of an aCDN resource. Each location supports: id (to update existing), " +
           "url, modifier ('='|'~'|'~*'|'^~'), position, cache_enabled, active_ttl, browser_active_ttl, default_ttl, " +
           "custom_ttls, cache_min_uses, honor_response_ttl_headers, proxy_buffering, proxy_cache, deny_traffic, " +
-          "truncate_url_params, if_modified_since_enabled, if_modified_since, _destroy (true to remove the location).",
+          "truncate_url_params, if_modified_since_enabled, if_modified_since, _destroy (true to remove the location). " +
+          "Note: the API rejects location management for resources in basic mode (409) — the resource must have " +
+          "advanced/custom locations enabled.",
         inputSchema: {
           resource_id: uuid.describe("aCDN resource (pull zone) ID"),
           locations: z
