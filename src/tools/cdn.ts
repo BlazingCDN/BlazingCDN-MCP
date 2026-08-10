@@ -23,7 +23,9 @@ const settingsSchema = z
       "deny_blocked_referrers=true (hotlink_domains feeds the ALLOWED list even in block mode); " +
       "related fields: hotlink_allowed_domains, deny_none_referrers, " +
       "country_protection_enabled + country_protection_type ('allow'|'block') + country_protection_list (ISO 3166 codes, e.g. ['BY','CN']), " +
-      "ip_protection_enabled + ip_protection_type ('allow'|'block') + ip_protection_list (IP addresses), " +
+      "ip_protection_enabled + ip_protection_type ('allow'|'block') + ip_protection_list (IP addresses) " +
+      "(IMPORTANT: after enabling country/IP/hotlink protections, verify enforcement with a real test request " +
+      "before reporting them active — the settings save via API but edge enforcement may lag or require panel-side review), " +
       "securelink_enabled (must be set together with securelink_arg and securelink_value) + securelink_expiration/" +
       "securelink_expiration_arg/securelink_addr, " +
       "truncate_url_params, truncate_url_params_ext (only when truncate_url_params is false), " +
