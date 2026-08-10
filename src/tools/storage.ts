@@ -96,7 +96,10 @@ export function registerStorageTools(server: McpServer, client: ApiClient, confi
         description: "Create a new cloud storage bucket.",
         inputSchema: {
           name: z.string().describe("Bucket name"),
-          type: z.enum(["private", "segments", "cdn"]).optional().describe("Bucket content type"),
+          type: z
+            .enum(["private", "segments", "cdn"])
+            .optional()
+            .describe("Bucket content type. Must be 'cdn' to use the bucket as a pull-zone origin (default 'private' is rejected with 422)"),
           web_index: z.string().optional().describe("Path to the bucket index file"),
         },
         annotations: WRITE,
