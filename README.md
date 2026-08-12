@@ -145,9 +145,12 @@ npx @modelcontextprotocol/inspector node dist/index.js   # interactive inspector
 
 ## Security notes
 
-- The API token is read from the environment and sent only to `BLAZINGCDN_API_URL`; it is never logged.
+- The API token is read from the environment and sent only to `BLAZINGCDN_API_URL`; it is never logged. No middleman, no telemetry.
+- Read-only by default; destructive operations (zone/bucket/account deletion) are not implemented in any mode.
 - Tool output is truncated at 60 KB to keep agent contexts healthy.
 - API requests time out after 30 s (file uploads: 5 min).
+
+Full threat model, limitations and recommendations: [SECURITY.md](SECURITY.md).
 
 ## License
 
