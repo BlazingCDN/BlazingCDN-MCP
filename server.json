@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
   "name": "io.github.blazingcdn/blazingcdn-mcp",
   "description": "Manage BlazingCDN from AI agents: CDN resources, cache purge/warmup, traffic metrics, custom domains, cloud storage and video CDN",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "repository": {
     "url": "https://github.com/BlazingCDN/BlazingCDN-MCP",
     "source": "github"
@@ -11,7 +11,7 @@
     {
       "registryType": "npm",
       "identifier": "@blazingcdn/mcp",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "transport": {
         "type": "stdio"
       },
