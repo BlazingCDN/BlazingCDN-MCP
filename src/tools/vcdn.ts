@@ -223,7 +223,9 @@ export function registerVcdnTools(server: McpServer, client: ApiClient, config: 
       "create_vcdn_resource",
       {
         title: "Create vCDN resource",
-        description: "Create a new Video CDN resource.",
+        description:
+          "Create a new Video CDN resource. Provisioning is fast: the system_domain typically starts " +
+          "responding within ~1-2 minutes of creation.",
         inputSchema: {
           name: z.string().describe("Resource name"),
           www_folder: z.string().describe("Resource folder name, e.g. '/a'"),
