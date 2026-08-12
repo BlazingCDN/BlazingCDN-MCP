@@ -28,7 +28,9 @@ export function createServer(config: Config): McpServer {
         "numeric ids. Most statistics tools require explicit start/end dates. " +
         "Confirm with the user before purging the whole cache (clear_all). " +
         "Timings: settings changes reach the edge in ~1-10 minutes (country/hotlink protections: hours); " +
-        "a new zone goes live in ~10-11 minutes on average (occasionally faster or much slower — poll, don't assume); " +
+        "a new zone goes live in ~10-11 minutes on average (occasionally faster or much slower — poll, don't assume; " +
+        "still not serving after ~20 minutes = likely stuck: create a replacement zone and have the user remove the " +
+        "stuck one in the panel); " +
         "Video CDN resources go live in ~1 minute. Create multiple zones SEQUENTIALLY (wait for each to serve " +
         "before creating the next) — parallel batches queue and stretch to 30-45+ minutes per zone. " +
         "Read tools and cache purge/warmup are always available. " +

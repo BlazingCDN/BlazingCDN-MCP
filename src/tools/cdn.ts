@@ -91,9 +91,11 @@ export function registerCdnTools(server: McpServer, client: ApiClient, config: C
           "Create a new Anycast CDN resource (pull zone). Requires name, source and origin_url. " +
           "Optionally attach a cloud storage bucket or external storage as the origin, and create a custom domain in one call. " +
           "Provisioning: a new zone typically becomes fully live (DNS + serving) in ~10-11 minutes (sometimes 2-6, " +
-          "rarely hours) — poll the zone's cdn_domain rather than assuming failure. When creating SEVERAL zones, " +
-          "create them SEQUENTIALLY — wait until each zone serves before creating the next; parallel batches queue " +
-          "up and push individual zones to 30-45+ minutes.",
+          "rarely hours) — poll the zone's cdn_domain rather than assuming failure. If a zone is still not serving " +
+          "after ~20 minutes, treat it as stuck: create a replacement zone with a new name and use that one instead " +
+          "(this server cannot delete zones — ask the user to remove the stuck zone in the panel and mention it to " +
+          "support). When creating SEVERAL zones, create them SEQUENTIALLY — wait until each zone serves before " +
+          "creating the next; parallel batches queue up and push individual zones to 30-45+ minutes.",
         inputSchema: {
           name: z.string().describe("Pull zone name"),
           source: z.enum(["origin", "storage"]).describe("Source type"),
