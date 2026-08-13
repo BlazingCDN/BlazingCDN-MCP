@@ -1,11 +1,11 @@
 {
   "name": "@blazingcdn/mcp",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Official BlazingCDN MCP server \u2014 manage CDN resources, purge cache, query metrics, cloud storage and video CDN from AI agents",
   "type": "module",
   "license": "MIT",
   "author": "BlazingCDN <support@blazingcdn.com>",
-  "homepage": "https://github.com/BlazingCDN/BlazingCDN-MCP#readme",
+  "homepage": "https://blazingcdn.com",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/BlazingCDN/BlazingCDN-MCP.git"
@@ -15,13 +15,15 @@
   },
   "keywords": [
     "mcp",
+    "mcp-server",
+    "modelcontextprotocol",
     "model-context-protocol",
-    "blazingcdn",
     "cdn",
+    "blazingcdn",
+    "video-cdn",
     "cache",
-    "ai",
-    "claude",
-    "llm"
+    "ai-agents",
+    "claude"
   ],
   "bin": {
     "blazingcdn-mcp": "dist/index.js"
