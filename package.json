@@ -1,6 +1,6 @@
 {
   "name": "@blazingcdn/mcp",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Official BlazingCDN MCP server \u2014 manage CDN resources, purge cache, query metrics, cloud storage and video CDN from AI agents",
   "type": "module",
   "license": "MIT",
@@ -54,5 +54,5 @@
     "typescript": "^5.6.0",
     "vitest": "^3.0.0"
   },
-  "mcpName": "io.github.blazingcdn/blazingcdn-mcp"
+  "mcpName": "io.github.BlazingCDN/blazingcdn-mcp"
 }
