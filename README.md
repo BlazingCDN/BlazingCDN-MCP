@@ -34,6 +34,10 @@ All plans include custom domains, unlimited requests, origin shield, URL signatu
 
 ## Quick start
 
+### Claude Desktop — one-click install (no terminal needed)
+
+Download the latest `.mcpb` bundle from [Releases](https://github.com/BlazingCDN/BlazingCDN-MCP/releases/latest) and double-click it — Claude Desktop will ask for your API token and install the server. Node.js is not required.
+
 ### Claude Code
 
 ```bash
