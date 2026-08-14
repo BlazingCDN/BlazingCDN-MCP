@@ -1,0 +1,76 @@
+{
+  "manifest_version": "0.2",
+  "name": "blazingcdn-mcp",
+  "display_name": "BlazingCDN",
+  "version": "0.1.3",
+  "description": "Manage BlazingCDN from AI agents: CDN zones, cache, metrics, domains, cloud storage and video CDN",
+  "long_description": "Official MCP server for BlazingCDN \u2014 a CDN for video, software & sports media. 52 tools covering Anycast CDN resources, cache purge/warmup, traffic metrics, custom domains, cloud storage and the Video CDN. Safe by default: read-only until write/delete are explicitly enabled; destructive operations are not implemented at all.",
+  "author": {
+    "name": "BlazingCDN",
+    "email": "support@blazingcdn.com",
+    "url": "https://blazingcdn.com"
+  },
+  "homepage": "https://blazingcdn.com",
+  "documentation": "https://github.com/BlazingCDN/BlazingCDN-MCP#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BlazingCDN/BlazingCDN-MCP"
+  },
+  "license": "MIT",
+  "keywords": [
+    "cdn",
+    "blazingcdn",
+    "video-cdn",
+    "cache",
+    "metrics",
+    "cloud-storage"
+  ],
+  "server": {
+    "type": "node",
+    "entry_point": "dist/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": [
+        "${__dirname}/dist/index.js"
+      ],
+      "env": {
+        "BLAZINGCDN_API_TOKEN": "${user_config.api_token}",
+        "BLAZINGCDN_ALLOW_WRITE": "${user_config.allow_write}",
+        "BLAZINGCDN_ALLOW_DELETE": "${user_config.allow_delete}"
+      }
+    }
+  },
+  "user_config": {
+    "api_token": {
+      "type": "string",
+      "title": "BlazingCDN API token",
+      "description": "Create one in the BlazingCDN panel: Account \u2192 API tokens",
+      "sensitive": true,
+      "required": true
+    },
+    "allow_write": {
+      "type": "string",
+      "title": "Enable write tools (set 1 to enable)",
+      "description": "Enables create/update tools when set to 1",
+      "required": false,
+      "default": ""
+    },
+    "allow_delete": {
+      "type": "string",
+      "title": "Enable delete tools (set 1 to enable)",
+      "description": "Enables delete_custom_domain and delete_vcdn_resource when set to 1",
+      "required": false,
+      "default": ""
+    }
+  },
+  "compatibility": {
+    "platforms": [
+      "darwin",
+      "win32",
+      "linux"
+    ],
+    "runtimes": {
+      "node": ">=20"
+    }
+  }
+}
