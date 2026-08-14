@@ -1,0 +1,33 @@
+# Smithery configuration — https://smithery.ai/docs/build/project-config/smithery.yaml
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    required:
+      - blazingcdnApiToken
+    properties:
+      blazingcdnApiToken:
+        type: string
+        description: BlazingCDN API access token (create one in the panel — Account → API tokens)
+      allowWrite:
+        type: boolean
+        default: false
+        description: Enable create/update tools (BLAZINGCDN_ALLOW_WRITE)
+      allowDelete:
+        type: boolean
+        default: false
+        description: Enable delete tools — custom domains and vCDN resources only (BLAZINGCDN_ALLOW_DELETE)
+  commandFunction: |-
+    (config) => ({
+      command: 'node',
+      args: ['dist/index.js'],
+      env: {
+        BLAZINGCDN_API_TOKEN: config.blazingcdnApiToken,
+        ...(config.allowWrite ? { BLAZINGCDN_ALLOW_WRITE: '1' } : {}),
+        ...(config.allowDelete ? { BLAZINGCDN_ALLOW_DELETE: '1' } : {})
+      }
+    })
+  exampleConfig:
+    blazingcdnApiToken: your-blazingcdn-api-token
+    allowWrite: false
+    allowDelete: false
