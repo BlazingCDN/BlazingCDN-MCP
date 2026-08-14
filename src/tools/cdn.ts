@@ -56,17 +56,29 @@ export function registerCdnTools(server: McpServer, client: ApiClient, config: C
     {
       title: "List CDN resources",
       description:
-        "List all Anycast CDN resources (pull zones) in the account with their settings, domains and state.",
+        "List Anycast CDN resources (pull zones) in the account with their settings, domains and state. " +
+        "The API paginates (its own default is 25 per page, undocumented) — this tool requests up to 100 per call. " +
+        "ALWAYS check meta.total in the response: if it exceeds the number of returned zones, fetch the remaining " +
+        "pages with the page parameter before reporting the account's zones.",
       inputSchema: {
         traffic_distribution: z
           .boolean()
           .optional()
           .describe("Include traffic distribution data for each resource"),
+        page: z.number().int().min(1).optional().describe("Page number (default 1)"),
+        per_page: z.number().int().min(1).max(100).optional().describe("Zones per page (default 100, max 100)"),
       },
       annotations: READ_ONLY,
     },
     toolHandler(async (args) =>
-      client.get("/api/v1/pull_zones", compact({ traffic_distribution: args.traffic_distribution })),
+      client.get(
+        "/api/v1/pull_zones",
+        compact({
+          traffic_distribution: args.traffic_distribution,
+          page: args.page,
+          per_page: args.per_page ?? 100,
+        }),
+      ),
     ),
   );
 

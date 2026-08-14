@@ -127,6 +127,16 @@ describe("tool handlers", () => {
     expect(text).not.toContain("test-token");
   });
 
+  it("list_cdn_resources defaults to per_page=100 (the API silently paginates at 25)", async () => {
+    const requests = mockFetch();
+    const client = await connectClient();
+    await client.callTool({ name: "list_cdn_resources", arguments: {} });
+    expect(requests[0].url.searchParams.get("per_page")).toBe("100");
+    await client.callTool({ name: "list_cdn_resources", arguments: { page: 2, per_page: 50 } });
+    expect(requests[1].url.searchParams.get("page")).toBe("2");
+    expect(requests[1].url.searchParams.get("per_page")).toBe("50");
+  });
+
   it("estimate_traffic_cost computes progressive Flex pricing offline", async () => {
     const requests = mockFetch();
     const client = await connectClient();
