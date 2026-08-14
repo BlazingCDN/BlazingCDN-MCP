@@ -147,6 +147,10 @@ npm run build   # tsc -> dist/
 npx @modelcontextprotocol/inspector node dist/index.js   # interactive inspector
 ```
 
+## Privacy Policy
+
+The server collects nothing: no telemetry, no analytics, no third-party calls. Your API token stays in process memory and is sent only to the BlazingCDN API over HTTPS. Full policy: [PRIVACY.md](PRIVACY.md) · service-level data handling: [BlazingCDN Legal Information](https://blazingcdn.com/legal-information/).
+
 ## Security notes
 
 - The API token is read from the environment and sent only to `BLAZINGCDN_API_URL`; it is never logged. No middleman, no telemetry.

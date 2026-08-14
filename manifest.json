@@ -72,5 +72,9 @@
     "runtimes": {
       "node": ">=20"
     }
-  }
+  },
+  "privacy_policies": [
+    "https://raw.githubusercontent.com/BlazingCDN/BlazingCDN-MCP/main/PRIVACY.md",
+    "https://blazingcdn.com/legal-information/"
+  ]
 }
