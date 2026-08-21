@@ -2,7 +2,7 @@
   "manifest_version": "0.2",
   "name": "blazingcdn-mcp",
   "display_name": "BlazingCDN",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Manage BlazingCDN from AI agents: CDN zones, cache, metrics, domains, cloud storage and video CDN",
   "long_description": "Official MCP server for BlazingCDN \u2014 a CDN for video, software & sports media. 52 tools covering Anycast CDN resources, cache purge/warmup, traffic metrics, custom domains, cloud storage and the Video CDN. Safe by default: read-only until write/delete are explicitly enabled; destructive operations are not implemented at all.",
   "author": {

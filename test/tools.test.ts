@@ -137,6 +137,15 @@ describe("tool handlers", () => {
     expect(requests[1].url.searchParams.get("per_page")).toBe("50");
   });
 
+  it("create_bucket defaults to type 'cdn' and passes protocol through", async () => {
+    const requests = mockFetch();
+    const client = await connectClient({ allowWrite: true });
+    await client.callTool({ name: "create_bucket", arguments: { name: "origin-bucket" } });
+    expect(requests[0].body).toEqual({ bucket: { name: "origin-bucket", type: "cdn" } });
+    await client.callTool({ name: "create_bucket", arguments: { name: "s3b", type: "private", protocol: "s3" } });
+    expect(requests[1].body).toEqual({ bucket: { name: "s3b", type: "private", protocol: "s3" } });
+  });
+
   it("estimate_traffic_cost computes progressive Flex pricing offline", async () => {
     const requests = mockFetch();
     const client = await connectClient();

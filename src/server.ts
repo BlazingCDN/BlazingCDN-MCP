@@ -11,7 +11,7 @@ import { registerStorageTools } from "./tools/storage.js";
 import { registerVcdnTools } from "./tools/vcdn.js";
 
 export const SERVER_NAME = "blazingcdn";
-export const SERVER_VERSION = "0.1.4";
+export const SERVER_VERSION = "0.1.5";
 
 export function createServer(config: Config): McpServer {
   const server = new McpServer(
@@ -23,6 +23,7 @@ export function createServer(config: Config): McpServer {
         "other large files, built for high-volume projects from 5 TB/month. " +
         "Getting started: list_cdn_resources / list_vcdn_resources show what exists in the account; " +
         "search_docs answers product and API questions; estimate_traffic_cost prices monthly traffic. " +
+        "Buckets meant as CDN origins must be type 'cdn' (create_bucket defaults to it). " +
         "Call the matching get_* tool before any update_* — nested settings objects are replaced wholesale, " +
         "not merged. aCDN resources use UUID ids; vCDN sub-entities (domains, FTP logins, auto imports) use " +
         "numeric ids. Most statistics tools require explicit start/end dates. " +

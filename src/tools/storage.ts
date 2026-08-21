@@ -93,18 +93,31 @@ export function registerStorageTools(server: McpServer, client: ApiClient, confi
       "create_bucket",
       {
         title: "Create storage bucket",
-        description: "Create a new cloud storage bucket.",
+        description:
+          "Create a new cloud storage bucket. Defaults to type 'cdn', which is REQUIRED for a bucket that will serve " +
+          "as a pull-zone origin (the API's own default, 'private', cannot be attached to a CDN resource). " +
+          "Pass type 'private' only for storage that is never served by the CDN.",
         inputSchema: {
           name: z.string().describe("Bucket name"),
           type: z
             .enum(["private", "segments", "cdn"])
             .optional()
-            .describe("Bucket content type. Must be 'cdn' to use the bucket as a pull-zone origin (default 'private' is rejected with 422)"),
+            .describe("Bucket content type — default 'cdn' (usable as CDN origin); 'private' for non-served storage"),
+          protocol: z
+            .enum(["swift", "s3"])
+            .optional()
+            .describe(
+              "Requested access protocol. The API documents no such field and buckets are created as 'swift' by default; " +
+                "this value is passed through in case the platform honours it — verify the 'protocol' field of the " +
+                "created bucket and fall back to the panel if an S3 bucket is required.",
+            ),
           web_index: z.string().optional().describe("Path to the bucket index file"),
         },
         annotations: WRITE,
       },
-      toolHandler(async (args) => client.post("/api/v1/buckets", { bucket: compact({ ...args }) })),
+      toolHandler(async (args) =>
+        client.post("/api/v1/buckets", { bucket: compact({ ...args, type: args.type ?? "cdn" }) }),
+      ),
     );
 
     server.registerTool(

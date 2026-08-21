@@ -114,7 +114,7 @@ export function registerCdnTools(server: McpServer, client: ApiClient, config: C
           origin_url: z.string().describe("URL of the origin server"),
           external_storage_id: uuid.optional().describe("External storage ID to use as origin"),
           external_storage_alias: z.string().optional().describe("External storage alias"),
-          bucket_id: uuid.optional().describe("Cloud storage bucket ID to use as origin"),
+          bucket_id: uuid.optional().describe("Cloud storage bucket ID to use as origin (the bucket must have type 'cdn')"),
           folder_name: z.string().optional().describe("Bucket folder to serve from (bucket origins only)"),
           domain: z.string().optional().describe("Custom domain to create for the resource"),
           system_dns_zone_id: uuid.optional().describe("System DNS zone ID for the CDN domain"),
