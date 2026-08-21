@@ -110,6 +110,8 @@ Deleting CDN resources (pull zones), buckets, external storages, accounts or use
 ### Cloud Storage
 `list_buckets`, `get_bucket`, `get_bucket_metrics`, `get_storage_info`, `create_bucket` ✏️, `update_bucket` ✏️, `list_external_storages`, `get_external_storage`, `create_external_storage` ✏️, `update_external_storage` ✏️, `test_external_storage_connection` ✏️
 
+A bucket used as a CDN resource origin must be of type `cdn` — `create_bucket` creates that type by default (`private` buckets cannot be attached to a pull zone). Pass `protocol: "s3"` for an S3-compatible bucket; the protocol cannot be changed after creation.
+
 ### Video CDN
 `list_vcdn_resources`, `get_vcdn_resource`, `get_vcdn_statistics` (totals, timeseries, by domain, top domains, HTTP codes, bandwidth, cache/storage), `list_vcdn_domains`, `get_vcdn_domain`, `list_vcdn_files`, `get_vcdn_files_total`, `list_ftp_logins`, `list_auto_imports`, `get_vcdn_proxy`, `get_vcdn_ftp_settings`, `get_vcdn_settings`, `create_vcdn_resource` ✏️, `update_vcdn_resource` ✏️, `create_vcdn_domain` ✏️, `update_vcdn_domain` ✏️, `upload_vcdn_file` ✏️, `manage_auto_import` ✏️, `update_vcdn_proxy` ✏️, `update_vcdn_ftp_settings` ✏️, `manage_ftp_login` ✏️, `update_vcdn_settings` ✏️, `delete_vcdn_resource` 🗑️
 
