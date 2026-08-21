@@ -107,9 +107,9 @@ export function registerStorageTools(server: McpServer, client: ApiClient, confi
             .enum(["swift", "s3"])
             .optional()
             .describe(
-              "Requested access protocol. The API documents no such field and buckets are created as 'swift' by default; " +
-                "this value is passed through in case the platform honours it — verify the 'protocol' field of the " +
-                "created bucket and fall back to the panel if an S3 bucket is required.",
+              "Access protocol: 'swift' (API default) or 's3' for an S3-compatible bucket. Undocumented in the " +
+                "OpenAPI spec but honoured by the live API; the created bucket's 'protocol' field confirms it. " +
+                "Immutable after creation — choose it up front.",
             ),
           web_index: z.string().optional().describe("Path to the bucket index file"),
         },
