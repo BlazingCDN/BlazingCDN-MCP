@@ -1,15 +1,25 @@
 import { describe, expect, it } from "vitest";
+import { INSTRUCTIONS_LIMIT } from "../src/server.js";
 import { connectClient, mockFetch } from "./helpers.js";
 
 const RID = "65202fd5-55e8-47ac-a952-162c7a102a04";
 const textOf = (result: { content: unknown }) => (result.content as Array<{ text: string }>)[0].text;
 
 describe("guidance for features that are switched off", () => {
+  it("instructions fit under Claude Code's 2048-character cap in every mode", async () => {
+    for (const allowWrite of [false, true]) {
+      for (const allowDelete of [false, true]) {
+        const instructions = (await connectClient({ allowWrite, allowDelete })).getInstructions() ?? "";
+        expect(instructions.length).toBeLessThanOrEqual(INSTRUCTIONS_LIMIT);
+      }
+    }
+  });
+
   it("read-only instructions point to the panel switch, not to support", async () => {
     const instructions = (await connectClient()).getInstructions() ?? "";
     expect(instructions).toContain("https://client.blazingcdn.com/anycast_cdn/<resource_id>/<tab>");
     expect(instructions).toContain("never send them to support");
-    expect(instructions).toContain("BLAZINGCDN_ALLOW_WRITE=1 lets you");
+    expect(instructions).toContain("BLAZINGCDN_ALLOW_WRITE=1 would let you do it");
     expect(instructions).not.toContain("Offer to turn it on yourself");
   });
 
@@ -19,12 +29,11 @@ describe("guidance for features that are switched off", () => {
     expect(instructions).toContain("wait for a yes");
   });
 
-  it("instructions explain how to enable image processing and request variants", async () => {
+  it("instructions say how to enable image processing and where the presets are", async () => {
     const instructions = (await connectClient()).getInstructions() ?? "";
     expect(instructions).toContain("image_processing_enabled=true");
-    expect(instructions).toContain("?preset=<name>");
-    for (const preset of ["resizefill", "resizefit", "crop"]) expect(instructions).toContain(preset);
-    expect(instructions).toContain("ce center (default), no top, so bottom, ea right, we left, noea/nowe/soea/sowe corners");
+    expect(instructions).toContain("?preset=resizefill&width=200&height=200");
+    expect(instructions).toContain("search_docs('image processing')");
   });
 
   it("update_cdn_resource advertises image processing and location_mode", async () => {
@@ -66,10 +75,20 @@ describe("guidance for features that are switched off", () => {
     expect(text).not.toContain("test-token");
   });
 
-  it("search_docs finds the image processing guide and the customer panel, not the retired KB domain", async () => {
+  it("search_docs returns the full image processing preset guide first", async () => {
     const client = await connectClient();
     const search = async (query: string) => textOf(await client.callTool({ name: "search_docs", arguments: { query } }));
+    const [guide] = JSON.parse(await search("image processing"));
+    expect(guide.url).toContain("Image+Processing+Presets");
+    for (const part of ["resizefill", "resizefit", "type=fit|fill", "ce center (default)", "noea/nowe/soea/sowe"]) {
+      expect(guide.summary).toContain(part);
+    }
     expect(JSON.parse(await search("image processing resize"))[0].url).toContain("Image+Processing+Presets");
+  });
+
+  it("search_docs finds the customer panel, not the retired KB domain", async () => {
+    const client = await connectClient();
+    const search = async (query: string) => textOf(await client.callTool({ name: "search_docs", arguments: { query } }));
     expect(await search("enable in panel")).toContain("client.blazingcdn.com");
     expect(await search("knowledge base")).not.toContain("knowledgebase.blazingcdn.com");
   });

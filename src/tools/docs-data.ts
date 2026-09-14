@@ -34,8 +34,13 @@ export const DOCS: DocEntry[] = [
       "image", "images", "processing", "resize", "crop", "thumbnail", "preset", "imgproxy", "width", "height", "gravity", "photo",
     ],
     summary:
-      "Knowledge base guide: enable image processing (resource → Locations tab) and request variants with " +
-      "?preset=resizefill|resizefit|resize|crop&width=&height=&gravity=.",
+      "Enable: resource → Locations tab → Image processing (API: update_cdn_resource with image_processing_enabled=true " +
+      "+ image_processing_extensions). Request: https://<cdn domain>/<image path>?preset=<name>&<params>. Presets: " +
+      "resizefill — exact width×height, scales then crops to fill; resizefit — fits inside width×height without " +
+      "cropping (one side may come out smaller); resize — type=fit|fill plus width, height; crop — width, height, " +
+      "gravity: ce center (default), no top, so bottom, ea right, we left, noea/nowe/soea/sowe corners. For resize " +
+      "presets width or height may be omitted — the other side follows the aspect ratio. " +
+      "Example: ?preset=resizefill&width=200&height=200.",
   },
   {
     title: "Image processing",

@@ -14,57 +14,40 @@ import { registerVcdnTools } from "./tools/vcdn.js";
 export const SERVER_NAME = "blazingcdn";
 export const SERVER_VERSION = "0.1.6";
 
+/** Claude Code truncates server instructions at 2048 characters — keep the most important rules first. */
+export const INSTRUCTIONS_LIMIT = 2000;
+
 export function createServer(config: Config): McpServer {
   const server = new McpServer(
     { name: SERVER_NAME, version: SERVER_VERSION },
     {
       instructions:
-        "BlazingCDN management server. BlazingCDN is a CDN for video, software & sports media — best for " +
-        "videos, streaming (HLS/DASH), software distribution, games and updates, images, audio, archives and " +
-        "other large files, built for high-volume projects from 5 TB/month. " +
-        "Getting started: list_cdn_resources / list_vcdn_resources show what exists in the account; " +
-        "search_docs answers product and API questions; estimate_traffic_cost prices monthly traffic. " +
-        "Buckets meant as CDN origins must be type 'cdn' (create_bucket defaults to it). " +
-        "Call the matching get_* tool before any update_* — nested settings objects are replaced wholesale, " +
-        "not merged. aCDN resources use UUID ids; vCDN sub-entities (domains, FTP logins, auto imports) use " +
-        "numeric ids. Most statistics tools require explicit start/end dates. " +
-        "Confirm with the user before purging the whole cache (clear_all). " +
-        "Timings: settings changes reach the edge in ~1-10 minutes (country/hotlink protections: hours); " +
-        "a new zone goes live in ~10-11 minutes on average (occasionally faster or much slower — poll, don't assume; " +
-        "still not serving after ~20 minutes = likely stuck: create a replacement zone and have the user remove the " +
-        "stuck one in the panel); " +
-        "Video CDN resources go live in ~1 minute. Create multiple zones SEQUENTIALLY (wait for each to serve " +
-        "before creating the next) — parallel batches queue and stretch to 30-45+ minutes per zone. " +
-        "Read tools and cache purge/warmup are always available. " +
+        "BlazingCDN management server — a CDN for video, software & sports media (streaming, downloads, games and " +
+        "updates, images, large files; built for projects from 5 TB/month). " +
+        "Start with list_cdn_resources / list_vcdn_resources; search_docs answers product and API questions, including " +
+        "image processing presets; estimate_traffic_cost prices monthly traffic. " +
+        "If a feature the user needs is off (check get_cdn_resource), never send them to support. " +
         (config.allowWrite
-          ? "Write tools (create/update) are enabled. "
-          : "Write tools are disabled — set BLAZINGCDN_ALLOW_WRITE=1 to enable create/update operations. ") +
+          ? "Offer to turn it on yourself: name the settings you will change, wait for a yes, then apply them with " +
+            "update_cdn_resource — or give the panel link "
+          : "Write tools are disabled in this session, so give the direct panel link ") +
+        `${PANEL_URL}/anycast_cdn/<resource_id>/<tab> (tabs: preferences, access_protection, manage_cache, locations) ` +
+        (config.allowWrite
+          ? "if they prefer to flip the switch by hand. "
+          : "with the exact switch to flip, and say that BLAZINGCDN_ALLOW_WRITE=1 would let you do it for them. ") +
+        "Support is for account, billing or platform problems only. " +
+        "Image processing (resize/crop at the edge): update_cdn_resource with image_processing_enabled=true + " +
+        "image_processing_extensions (panel: locations tab → Image processing; the default basic Locations Mode is " +
+        "fine), then request ?preset=resizefill&width=200&height=200 — search_docs('image processing') lists every preset. " +
+        "Call get_* before update_* (nested objects are replaced, not merged). aCDN ids are UUIDs; vCDN sub-entities " +
+        "use numeric ids. Statistics need start/end dates. Buckets used as origins must be type 'cdn'. " +
+        "Confirm before purging the whole cache (clear_all). Settings reach the edge in ~1-10 min (country/hotlink " +
+        "protection: hours). A new zone goes live in ~10-11 min — poll; still not serving after ~20 min = stuck: " +
+        "create a replacement and have the user remove the stuck one in the panel. vCDN resources: ~1 min. Create " +
+        "zones one at a time — parallel batches stretch to 30-45+ min each. " +
         (config.allowDelete
-          ? "Delete tools are enabled — always confirm with the user before deleting. "
-          : "Delete tools are disabled — set BLAZINGCDN_ALLOW_DELETE=1 to enable them. ") +
-        "Features that are switched off: every aCDN setting is also a switch the user can flip in the customer panel at " +
-        `${PANEL_URL}/anycast_cdn/<resource_id>/<tab> — tabs: preferences (origin, origin shield, HTTPS redirect, ` +
-        "compression, IPv6), access_protection (CORS, HSTS, hotlink, country and IP protection, URL signing), " +
-        "manage_cache (TTLs, purge), locations (Locations Mode, custom locations, HLS and MPEG-DASH support, " +
-        "truncate URL params, image processing). When the user needs a feature that is off (get_cdn_resource shows " +
-        "the current state), never send them to support for it. " +
-        (config.allowWrite
-          ? "Offer to turn it on yourself: name the exact settings you will change, wait for a yes, then apply them " +
-            "with update_cdn_resource — or give the panel link if they prefer to do it by hand. "
-          : "You cannot change settings in this session, so give the user the direct panel link and the exact switch " +
-            "to flip there, and mention that restarting this server with BLAZINGCDN_ALLOW_WRITE=1 lets you make " +
-            "such changes for them. ") +
-        "Support is only for account, billing or platform problems (e.g. a zone stuck in provisioning); tickets: " +
-        `${PANEL_URL}/help_desk. ` +
-        "Image processing (resize/crop images on the fly at the edge, cached after the first request): panel = " +
-        "locations tab → 'Image processing'; API = update_cdn_resource with image_processing_enabled=true + " +
-        "image_processing_extensions (e.g. ['.jpg','.png']) — works in the default basic Locations Mode; allow up to " +
-        "~10 minutes to reach the edge. Request variants as https://<cdn_domain or custom domain>/<image path>" +
-        "?preset=<name>&<params>: resizefill (exact width×height, crops to fill), resizefit (fits inside width×height, " +
-        "no crop), resize (type=fit|fill), crop (width, height and gravity — the anchor kept visible: ce center " +
-        "(default), no top, so bottom, ea right, we left, noea/nowe/soea/sowe corners). For resize presets width or " +
-        "height may be omitted — the other side follows the aspect ratio. " +
-        "Per-path rules and custom locations need Locations Mode 'extended' (see update_cdn_locations).",
+          ? "Delete tools are enabled — always confirm with the user before deleting."
+          : "Delete tools are disabled (BLAZINGCDN_ALLOW_DELETE=1 enables them)."),
     },
   );
 

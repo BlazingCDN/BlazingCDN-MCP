@@ -21,8 +21,9 @@ export function registerDocsTools(server: McpServer): void {
     {
       title: "Search BlazingCDN docs",
       description:
-        "Search BlazingCDN public documentation and product pages by keyword. " +
-        "Returns matching pages with URLs — fetch a URL for full details.",
+        "Search BlazingCDN documentation, how-to guides and product pages by keyword — e.g. 'image processing' " +
+        "returns the preset guide with the URL format and every parameter. " +
+        "Returns matching pages with URLs and summaries — fetch a URL for full details.",
       inputSchema: {
         query: z.string().describe("Search query, e.g. 'purge cache API' or 'video streaming pricing'"),
       },
