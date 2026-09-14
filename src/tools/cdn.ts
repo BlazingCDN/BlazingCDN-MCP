@@ -2,7 +2,7 @@ import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { ApiClient } from "../client.js";
 import type { Config } from "../config.js";
-import { compact, DESTRUCTIVE, READ_ONLY, toolHandler, WRITE } from "./util.js";
+import { compact, DESTRUCTIVE, PANEL_URL, READ_ONLY, toolHandler, WRITE } from "./util.js";
 
 const uuid = z.string().uuid();
 
@@ -40,10 +40,15 @@ const settingsSchema = z
       "_cache_min_uses/_proxy_cache families for both), and the mpeg_dash_* equivalents (mpeg_dash_support_enabled, " +
       "mpeg_dash_chunk_ext accepts ONLY ['.mp4'] — '.m4s' is rejected, though .m4s segments still proxy as regular files). " +
       "For live streams set playlist TTL to 1-2s and chunk TTL to minutes. " +
-      "Image processing: image_processing_enabled + image_processing_extensions (ARRAY with dots, e.g. ['.jpg','.png']; " +
-      "conflicts with truncate_url_params_ext; its TTLs must be 2-365 days — pass auto_resolve=true to let the API fix bounds) " +
-      "plus its own cache family (image_processing_active_ttl/_browser_active_ttl/_custom_ttls/_default_ttl/_cache_min_uses/" +
-      "_proxy_cache/_proxy_buffering/_honor_response_ttl_headers). " +
+      "Image processing (on-the-fly resize/crop at the edge — the same switch as Locations → Image processing in the panel; " +
+      "works in the default basic Locations Mode, no custom locations needed): image_processing_enabled + " +
+      "image_processing_extensions (ARRAY with dots, e.g. ['.jpg','.png']; must not overlap truncate_url_params_ext; its TTLs " +
+      "must be 2-365 days — pass auto_resolve=true to let the API fix bounds) plus its own cache family " +
+      "(image_processing_active_ttl/_browser_active_ttl/_custom_ttls/_default_ttl/_cache_min_uses/_proxy_cache/" +
+      "_proxy_buffering/_honor_response_ttl_headers). While it is on, CDN cache and origin shield cannot be switched off. " +
+      "location_mode ('basic'|'extended'): basic = locations are generated from the proxy/truncation settings; extended = " +
+      "full control over custom locations (required by update_cdn_locations). Switching back to basic resets all custom " +
+      "locations — confirm with the user before changing it. " +
       "The live API accepts and returns more fields than the OpenAPI spec documents (e.g. dnssec, restricted_countries) — " +
       "call get_cdn_resource to see everything (~147 fields); unknown keys pass through unchanged. " +
       "Zone creation and every settings change can take up to ~10 minutes to reach the edge (DNS of a new zone included) — " +
@@ -87,7 +92,11 @@ export function registerCdnTools(server: McpServer, client: ApiClient, config: C
     {
       title: "Get CDN resource",
       description:
-        "Get full details of one Anycast CDN resource (pull zone): origin, TTLs, compression, origin shield, domains, locations.",
+        "Get full details of one Anycast CDN resource (pull zone): origin, TTLs, compression, origin shield, domains, locations. " +
+        "Check here whether a feature is on before proposing changes — e.g. image_processing_enabled (+ " +
+        "image_processing_extensions), location_mode ('basic'|'extended'), hls_support_enabled, mpeg_dash_support_enabled, " +
+        "origin_shield_enabled, edge_compression. The same settings are switches in the customer panel at " +
+        `${PANEL_URL}/anycast_cdn/<resource_id>/<tab>.`,
       inputSchema: { resource_id: uuid.describe("aCDN resource (pull zone) ID") },
       annotations: READ_ONLY,
     },
@@ -128,7 +137,11 @@ export function registerCdnTools(server: McpServer, client: ApiClient, config: C
       "update_cdn_resource",
       {
         title: "Update CDN resource",
-        description: "Update settings of an Anycast CDN resource (pull zone): TTLs, compression, origin shield, origin, etc.",
+        description:
+          "Update settings of an Anycast CDN resource (pull zone): caching/TTLs, compression, origin shield, HTTPS, " +
+          "access protection (hotlink, country, IP, URL signing), HLS/DASH streaming, image processing (on-the-fly " +
+          "resize/crop), Locations Mode, origin. Send only the keys you change. Each setting is also a switch in the " +
+          `customer panel (${PANEL_URL}/anycast_cdn/<resource_id>/<tab>), so the user can make the same change by hand.`,
         inputSchema: {
           resource_id: uuid.describe("aCDN resource (pull zone) ID"),
           settings: settingsSchema,
@@ -175,8 +188,10 @@ export function registerCdnTools(server: McpServer, client: ApiClient, config: C
           "image_processing_enabled, image_processing_default_presets (object mapping preset name to an operation " +
           "string, e.g. {\"resizefit\": \"resize:fit:$arg_width:$arg_height\", \"crop\": \"crop:$arg_width:$arg_height:$arg_gravity\"}; " +
           "clients then request images as ?preset=resizefit&width=100&height=100 and the CDN transforms on the fly). " +
-          "Note: the API rejects location management for resources in basic mode (409) — the resource must have " +
-          "advanced/custom locations enabled.",
+          "Requires Locations Mode 'extended' — in the default basic mode the API answers 409. Switch it with " +
+          "update_cdn_resource {location_mode: 'extended'} once the user agrees, or have them flip 'Locations Mode' in " +
+          "the panel's locations tab. To simply turn image processing on you do not need this tool: use " +
+          "update_cdn_resource (image_processing_enabled + image_processing_extensions).",
         inputSchema: {
           resource_id: uuid.describe("aCDN resource (pull zone) ID"),
           locations: z

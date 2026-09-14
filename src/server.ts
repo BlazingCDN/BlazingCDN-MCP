@@ -8,10 +8,11 @@ import { registerDomainTools } from "./tools/domains.js";
 import { registerMetricsTools } from "./tools/metrics.js";
 import { registerPricingTools } from "./tools/pricing.js";
 import { registerStorageTools } from "./tools/storage.js";
+import { PANEL_URL } from "./tools/util.js";
 import { registerVcdnTools } from "./tools/vcdn.js";
 
 export const SERVER_NAME = "blazingcdn";
-export const SERVER_VERSION = "0.1.5";
+export const SERVER_VERSION = "0.1.6";
 
 export function createServer(config: Config): McpServer {
   const server = new McpServer(
@@ -39,8 +40,31 @@ export function createServer(config: Config): McpServer {
           ? "Write tools (create/update) are enabled. "
           : "Write tools are disabled — set BLAZINGCDN_ALLOW_WRITE=1 to enable create/update operations. ") +
         (config.allowDelete
-          ? "Delete tools are enabled — always confirm with the user before deleting."
-          : "Delete tools are disabled — set BLAZINGCDN_ALLOW_DELETE=1 to enable them."),
+          ? "Delete tools are enabled — always confirm with the user before deleting. "
+          : "Delete tools are disabled — set BLAZINGCDN_ALLOW_DELETE=1 to enable them. ") +
+        "Features that are switched off: every aCDN setting is also a switch the user can flip in the customer panel at " +
+        `${PANEL_URL}/anycast_cdn/<resource_id>/<tab> — tabs: preferences (origin, origin shield, HTTPS redirect, ` +
+        "compression, IPv6), access_protection (CORS, HSTS, hotlink, country and IP protection, URL signing), " +
+        "manage_cache (TTLs, purge), locations (Locations Mode, custom locations, HLS and MPEG-DASH support, " +
+        "truncate URL params, image processing). When the user needs a feature that is off (get_cdn_resource shows " +
+        "the current state), never send them to support for it. " +
+        (config.allowWrite
+          ? "Offer to turn it on yourself: name the exact settings you will change, wait for a yes, then apply them " +
+            "with update_cdn_resource — or give the panel link if they prefer to do it by hand. "
+          : "You cannot change settings in this session, so give the user the direct panel link and the exact switch " +
+            "to flip there, and mention that restarting this server with BLAZINGCDN_ALLOW_WRITE=1 lets you make " +
+            "such changes for them. ") +
+        "Support is only for account, billing or platform problems (e.g. a zone stuck in provisioning); tickets: " +
+        `${PANEL_URL}/help_desk. ` +
+        "Image processing (resize/crop images on the fly at the edge, cached after the first request): panel = " +
+        "locations tab → 'Image processing'; API = update_cdn_resource with image_processing_enabled=true + " +
+        "image_processing_extensions (e.g. ['.jpg','.png']) — works in the default basic Locations Mode; allow up to " +
+        "~10 minutes to reach the edge. Request variants as https://<cdn_domain or custom domain>/<image path>" +
+        "?preset=<name>&<params>: resizefill (exact width×height, crops to fill), resizefit (fits inside width×height, " +
+        "no crop), resize (type=fit|fill), crop (width, height and gravity — the anchor kept visible: ce center " +
+        "(default), no top, so bottom, ea right, we left, noea/nowe/soea/sowe corners). For resize presets width or " +
+        "height may be omitted — the other side follows the aspect ratio. " +
+        "Per-path rules and custom locations need Locations Mode 'extended' (see update_cdn_locations).",
     },
   );
 

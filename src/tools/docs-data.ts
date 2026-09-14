@@ -13,16 +13,43 @@ export const DOCS: DocEntry[] = [
     summary: "Full REST API documentation: Anycast CDN, Video CDN, Cloud Storage, DNS and account endpoints.",
   },
   {
-    title: "Knowledge base",
-    url: "https://knowledgebase.blazingcdn.com/",
-    keywords: ["knowledge", "base", "kb", "guide", "how", "tutorial", "help", "setup", "documentation"],
-    summary: "Step-by-step guides for setting up and operating BlazingCDN products.",
+    title: "Help center (knowledge base)",
+    url: "https://help.blazingcdn.com/",
+    keywords: ["knowledge", "base", "kb", "guide", "how", "tutorial", "help", "setup", "documentation", "faq", "question"],
+    summary: "Step-by-step guides for setting up and operating BlazingCDN products in the customer panel.",
   },
   {
-    title: "Help center",
-    url: "https://help.blazingcdn.com/",
-    keywords: ["help", "support", "ticket", "faq", "question"],
-    summary: "BlazingCDN help center and support portal.",
+    title: "Customer panel",
+    url: "https://client.blazingcdn.com/",
+    keywords: ["panel", "dashboard", "console", "settings", "enable", "toggle", "switch", "locations", "manually"],
+    summary:
+      "Where users change any setting themselves: Anycast CDN → resource → tabs overview, statistics, domains, " +
+      "preferences, access_protection, manage_cache, locations, raw_logs " +
+      "(direct link: https://client.blazingcdn.com/anycast_cdn/<resource_id>/<tab>).",
+  },
+  {
+    title: "Image Processing Presets",
+    url: "https://blazingcdn-kb.atlassian.net/wiki/spaces/BCDN/pages/148602882/Image+Processing+Presets",
+    keywords: [
+      "image", "images", "processing", "resize", "crop", "thumbnail", "preset", "imgproxy", "width", "height", "gravity", "photo",
+    ],
+    summary:
+      "Knowledge base guide: enable image processing (resource → Locations tab) and request variants with " +
+      "?preset=resizefill|resizefit|resize|crop&width=&height=&gravity=.",
+  },
+  {
+    title: "Image processing",
+    url: "https://blazingcdn.com/image-processing/",
+    keywords: ["image", "images", "processing", "resize", "crop", "thumbnail", "preset", "optimization"],
+    summary: "Product page: on-the-fly image resizing and cropping at the edge, cached after the first request.",
+  },
+  {
+    title: "Support tickets",
+    url: "https://client.blazingcdn.com/help_desk",
+    keywords: ["support", "ticket", "contact", "issue", "problem", "outage"],
+    summary:
+      "Open a ticket for account, billing or platform problems. Settings the user can change themselves " +
+      "(turning features on or off) are done in the customer panel, not through support.",
   },
   {
     title: "Anycast CDN",

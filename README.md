@@ -83,6 +83,10 @@ Running from GitHub instead of npm also works: replace `"args"` with `["-y", "gi
 
 Deleting CDN resources (pull zones), buckets, external storages, accounts or users is **not implemented at all** — those operations cannot be triggered through this server in any mode.
 
+### When a feature is switched off
+
+Every setting this server can change is also a switch in the [customer panel](https://client.blazingcdn.com). If you ask for something that is off on your resource — image processing, HLS/DASH support, origin shield — the agent tells you exactly where to flip it (`client.blazingcdn.com/anycast_cdn/<resource_id>/<tab>`), or, with `BLAZINGCDN_ALLOW_WRITE=1`, offers to turn it on for you and waits for your confirmation.
+
 ## Tools
 
 ### Anycast CDN
@@ -95,9 +99,9 @@ Deleting CDN resources (pull zones), buckets, external storages, accounts or use
 | `get_cdn_metrics` | Bandwidth, cache hit, requests, HTTP codes, traffic — by day/hour/minute, filter by region/domain |
 | `get_prometheus_metrics` | Prometheus-format metrics for monitoring |
 | `create_cdn_resource` ✏️ | Create a pull zone (origin, bucket or external storage) |
-| `update_cdn_resource` ✏️ | TTLs, compression, origin shield, HTTPS redirect, … |
+| `update_cdn_resource` ✏️ | TTLs, compression, origin shield, HTTPS, access protection, HLS/DASH, image processing, Locations Mode, … |
 | `bulk_update_cdn_resources` ✏️ | Same settings on several resources |
-| `update_cdn_locations` ✏️ | Per-path cache rules |
+| `update_cdn_locations` ✏️ | Per-path cache rules and image presets (needs Locations Mode `extended`) |
 
 ### Domains & DNS
 | Tool | Description |
@@ -129,6 +133,7 @@ A bucket used as a CDN resource origin must be of type `cdn` — `create_bucket`
 - *"Show HTTP 5xx rates for the last 24 hours per region"*
 - *"Warm up /video/intro.mp4 with brotli compression"*
 - *"How much would 190 TB/month cost on BlazingCDN?"*
+- *"Turn on image processing for the shop-images resource and give me a 200×200 thumbnail URL for /images/iphone.jpg"*
 
 ## HTTP transport (self-hosting)
 

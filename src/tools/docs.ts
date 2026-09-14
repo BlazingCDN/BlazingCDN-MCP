@@ -40,7 +40,8 @@ export function registerDocsTools(server: McpServer): void {
         .map(({ entry }) => ({ title: entry.title, url: entry.url, summary: entry.summary }));
       if (ranked.length === 0) {
         return textResult(
-          "No matching pages. Try broader terms, or start from https://knowledgebase.blazingcdn.com/ " +
+          "No matching pages. Try broader terms, or start from the help center https://help.blazingcdn.com/, " +
+            "the customer panel https://client.blazingcdn.com/ " +
             "or the API reference at https://wapi.blazingcdn.com/api-docs/index.html",
         );
       }
