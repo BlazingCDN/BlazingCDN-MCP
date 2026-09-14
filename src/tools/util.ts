@@ -42,7 +42,7 @@ function withNextStep(error: ApiError): string {
   if (error.status === 401) {
     return (
       `${error.message}\nNext step: the API token is invalid or expired — ask the user to create a new one in the ` +
-      `customer panel (${PANEL_URL}, Account → API tokens).`
+      `customer panel at ${PANEL_URL}/api (API → create new API credentials).`
     );
   }
   if (error.status === 409 && /basic mode/i.test(error.message)) {

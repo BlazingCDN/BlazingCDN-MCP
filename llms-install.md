@@ -5,7 +5,8 @@ BlazingCDN API token before you start — nothing works without it.
 
 ## 1. Get the API token (user action)
 
-The user creates a token in the BlazingCDN panel: **Account → API tokens**
+The user creates a token in the BlazingCDN panel: **API → create new API credentials**
+(https://client.blazingcdn.com/api)
 (sign-up at https://blazingcdn.com if they have no account yet). Never ask the
 user to paste the token into chat if your client supports secure env
 configuration — put it in the config file instead.

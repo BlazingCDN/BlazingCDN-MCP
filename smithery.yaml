@@ -8,15 +8,15 @@ startCommand:
     properties:
       blazingcdnApiToken:
         type: string
-        description: BlazingCDN API access token (create one in the panel — Account → API tokens)
+        description: BlazingCDN API token — in the panel open API (client.blazingcdn.com/api) and create new API credentials
       allowWrite:
         type: boolean
         default: false
-        description: Enable create/update tools (BLAZINGCDN_ALLOW_WRITE)
+        description: Allow changes — let the agent create and change CDN settings (image processing, caching, domains)
       allowDelete:
         type: boolean
         default: false
-        description: Enable delete tools — custom domains and vCDN resources only (BLAZINGCDN_ALLOW_DELETE)
+        description: Allow deleting — custom domains and Video CDN resources only; CDN resources, buckets and the account can never be deleted
   commandFunction: |-
     (config) => ({
       command: 'node',

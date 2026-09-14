@@ -15,7 +15,7 @@ BlazingCDN is a CDN for video, software & sports media — best for videos, stre
 
 1. **Sign up at [blazingcdn.com](https://blazingcdn.com/)** — every new account starts with a **14-day trial**. The trial is time-limited only: there is no free traffic included, traffic used during the trial is billed at the regular **$5/TB** rate.
 2. **Top up your balance** with at least **$10** right after signing up so your account doesn't go negative while you test.
-3. **Create an API access token**: BlazingCDN panel → Account → API tokens (or `POST /api/v1/access_tokens`).
+3. **Create an API access token**: in the [BlazingCDN panel](https://client.blazingcdn.com/api) open **API** → *create new API credentials* (or `POST /api/v1/access_tokens`).
 
 ### Pricing (Flex plan)
 
@@ -36,7 +36,7 @@ All plans include custom domains, unlimited requests, origin shield, URL signatu
 
 ### Claude Desktop — one-click install (no terminal needed)
 
-Download the latest `.mcpb` bundle from [Releases](https://github.com/BlazingCDN/BlazingCDN-MCP/releases/latest) and double-click it — Claude Desktop will ask for your API token and install the server. Node.js is not required.
+Download the latest `.mcpb` bundle from [Releases](https://github.com/BlazingCDN/BlazingCDN-MCP/releases/latest) and double-click it — Claude Desktop asks for your API token and shows two checkboxes: **Allow changes** (create and change CDN settings) and **Allow deleting** (custom domains and Video CDN resources). Both are off by default, so the server starts read-only. Node.js is not required.
 
 ### Claude Code
 

@@ -71,7 +71,7 @@ describe("guidance for features that are switched off", () => {
   it("a 401 error says where to create a new token without leaking the current one", async () => {
     mockFetch({ error: "unauthorized" }, 401);
     const text = textOf(await (await connectClient()).callTool({ name: "list_cdn_resources", arguments: {} }));
-    expect(text).toContain("Account → API tokens");
+    expect(text).toContain("https://client.blazingcdn.com/api");
     expect(text).not.toContain("test-token");
   });
 

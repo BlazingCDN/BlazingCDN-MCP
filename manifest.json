@@ -44,23 +44,23 @@
     "api_token": {
       "type": "string",
       "title": "BlazingCDN API token",
-      "description": "Create one in the BlazingCDN panel: Account \u2192 API tokens",
+      "description": "In the BlazingCDN panel open API (client.blazingcdn.com/api), create new API credentials and paste the token here",
       "sensitive": true,
       "required": true
     },
     "allow_write": {
-      "type": "string",
-      "title": "Enable write tools (set 1 to enable)",
-      "description": "Enables create/update tools when set to 1",
+      "type": "boolean",
+      "title": "Allow changes",
+      "description": "Let Claude create and change CDN settings: turn on image processing, adjust caching, add domains. Leave unchecked for read-only access (settings, statistics and cache purge still work)",
       "required": false,
-      "default": ""
+      "default": false
     },
     "allow_delete": {
-      "type": "string",
-      "title": "Enable delete tools (set 1 to enable)",
-      "description": "Enables delete_custom_domain and delete_vcdn_resource when set to 1",
+      "type": "boolean",
+      "title": "Allow deleting",
+      "description": "Let Claude delete custom domains and Video CDN resources. CDN resources, storage buckets and your account can never be deleted through this extension",
       "required": false,
-      "default": ""
+      "default": false
     }
   },
   "compatibility": {
