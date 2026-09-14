@@ -4,7 +4,7 @@
   "display_name": "BlazingCDN",
   "version": "0.1.6",
   "description": "Manage BlazingCDN from AI agents: CDN zones, cache, metrics, domains, cloud storage and video CDN",
-  "long_description": "Official MCP server for BlazingCDN \u2014 a CDN for video, software & sports media. 52 tools covering Anycast CDN resources, cache purge/warmup, traffic metrics, custom domains, cloud storage and the Video CDN. Safe by default: read-only until write/delete are explicitly enabled; destructive operations are not implemented at all.",
+  "long_description": "Official MCP server for BlazingCDN — a CDN for video, software & sports media. 52 tools covering Anycast CDN resources, cache purge/warmup, traffic metrics, custom domains, cloud storage and the Video CDN. Safe by default: read-only until write/delete are explicitly enabled; destructive operations are not implemented at all.",
   "author": {
     "name": "BlazingCDN",
     "email": "support@blazingcdn.com",
@@ -76,5 +76,216 @@
   "privacy_policies": [
     "https://raw.githubusercontent.com/BlazingCDN/BlazingCDN-MCP/main/PRIVACY.md",
     "https://blazingcdn.com/legal-information/"
+  ],
+  "icon": "assets/logo-400.png",
+  "tools": [
+    {
+      "name": "list_cdn_resources",
+      "description": "List Anycast CDN resources (pull zones) in the account with their settings, domains and state."
+    },
+    {
+      "name": "get_cdn_resource",
+      "description": "Get full details of one Anycast CDN resource (pull zone): origin, TTLs, compression, origin shield, domains, locations."
+    },
+    {
+      "name": "create_cdn_resource",
+      "description": "Create a new Anycast CDN resource (pull zone)."
+    },
+    {
+      "name": "update_cdn_resource",
+      "description": "Update settings of an Anycast CDN resource (pull zone): caching/TTLs, compression, origin shield, HTTPS, access protection (hotlink, country, IP, URL signing),…"
+    },
+    {
+      "name": "bulk_update_cdn_resources",
+      "description": "Apply the same settings to several Anycast CDN resources (pull zones) at once."
+    },
+    {
+      "name": "update_cdn_locations",
+      "description": "Update per-location (URL path) cache rules of an aCDN resource."
+    },
+    {
+      "name": "purge_cache",
+      "description": "Purge cached content."
+    },
+    {
+      "name": "warmup_cache",
+      "description": "Pre-fetch (warm up) content into the aCDN resource cache for the given paths, optionally per compression method."
+    },
+    {
+      "name": "get_cdn_metrics",
+      "description": "Get Anycast CDN metrics for the whole account or a single resource."
+    },
+    {
+      "name": "get_prometheus_metrics",
+      "description": "Fetch Prometheus-format metrics for monitoring dashboards: source 'cdn' for Anycast CDN, 'cloud_storage' for Cloud Store."
+    },
+    {
+      "name": "list_custom_domains",
+      "description": "List custom domains attached to an aCDN resource, including SSL status."
+    },
+    {
+      "name": "search_custom_domains",
+      "description": "Match domain names against all custom domains in the account (which resource serves which domain)."
+    },
+    {
+      "name": "list_system_dns_zones",
+      "description": "List system DNS zones available for CDN domain names (used when creating aCDN resources)."
+    },
+    {
+      "name": "add_custom_domain",
+      "description": "Attach one or more custom domains to an aCDN resource."
+    },
+    {
+      "name": "update_custom_domain",
+      "description": "Update a custom domain of an aCDN resource: attach an SSL certificate or enable auto SSL (Let's Encrypt)."
+    },
+    {
+      "name": "delete_custom_domain",
+      "description": "Detach and delete a custom domain from an aCDN resource."
+    },
+    {
+      "name": "list_buckets",
+      "description": "List all cloud storage buckets in the account."
+    },
+    {
+      "name": "get_bucket",
+      "description": "Get details of one cloud storage bucket."
+    },
+    {
+      "name": "get_bucket_metrics",
+      "description": "Get usage statistics for cloud storage buckets over a period."
+    },
+    {
+      "name": "get_storage_info",
+      "description": "Get cloud storage account info (endpoints, usage)."
+    },
+    {
+      "name": "list_external_storages",
+      "description": "List configured external (S3-compatible) storages used as CDN origins."
+    },
+    {
+      "name": "get_external_storage",
+      "description": "Get details of one external storage connection."
+    },
+    {
+      "name": "create_bucket",
+      "description": "Create a new cloud storage bucket."
+    },
+    {
+      "name": "update_bucket",
+      "description": "Update a cloud storage bucket's type or web index."
+    },
+    {
+      "name": "create_external_storage",
+      "description": "Connect an external S3-compatible storage to use as a CDN origin."
+    },
+    {
+      "name": "update_external_storage",
+      "description": "Update an external storage connection."
+    },
+    {
+      "name": "test_external_storage_connection",
+      "description": "Test connectivity and credentials of an external storage configuration before saving it."
+    },
+    {
+      "name": "list_vcdn_resources",
+      "description": "List all Video CDN resources in the account."
+    },
+    {
+      "name": "get_vcdn_resource",
+      "description": "Get details of one Video CDN resource."
+    },
+    {
+      "name": "get_vcdn_statistics",
+      "description": "Get Video CDN statistics."
+    },
+    {
+      "name": "list_vcdn_domains",
+      "description": "List Video CDN domains, optionally filtered by name or SSL certificate."
+    },
+    {
+      "name": "get_vcdn_domain",
+      "description": "Get details of one Video CDN domain."
+    },
+    {
+      "name": "list_vcdn_files",
+      "description": "List files stored on the Video CDN, with filtering, sorting and pagination."
+    },
+    {
+      "name": "get_vcdn_files_total",
+      "description": "Get total count and size of files stored on the Video CDN."
+    },
+    {
+      "name": "list_ftp_logins",
+      "description": "List FTP/SFTP logins of a Video CDN resource."
+    },
+    {
+      "name": "list_auto_imports",
+      "description": "List content auto-import jobs of a Video CDN resource."
+    },
+    {
+      "name": "get_vcdn_proxy",
+      "description": "Get proxy (origin fetch) settings of a Video CDN resource."
+    },
+    {
+      "name": "get_vcdn_ftp_settings",
+      "description": "Get FTP import settings of a Video CDN resource."
+    },
+    {
+      "name": "get_vcdn_settings",
+      "description": "Get account-wide default Video CDN settings."
+    },
+    {
+      "name": "create_vcdn_resource",
+      "description": "Create a new Video CDN resource."
+    },
+    {
+      "name": "update_vcdn_resource",
+      "description": "Rename a Video CDN resource."
+    },
+    {
+      "name": "create_vcdn_domain",
+      "description": "Add a domain to a Video CDN resource."
+    },
+    {
+      "name": "update_vcdn_domain",
+      "description": "Update a Video CDN domain."
+    },
+    {
+      "name": "upload_vcdn_file",
+      "description": "Upload a local file to a Video CDN resource."
+    },
+    {
+      "name": "manage_auto_import",
+      "description": "Create (omit auto_import_id) or update (pass auto_import_id) a content auto-import job of a vCDN resource."
+    },
+    {
+      "name": "update_vcdn_proxy",
+      "description": "Update proxy (origin fetch) settings of a vCDN resource."
+    },
+    {
+      "name": "update_vcdn_ftp_settings",
+      "description": "Update FTP import settings (password) of a vCDN resource."
+    },
+    {
+      "name": "manage_ftp_login",
+      "description": "Manage FTP/SFTP logins of a vCDN resource. action 'create' requires password; 'update' modifies an existing login (ftp_login_id); 'enable'/'disable' toggle an…"
+    },
+    {
+      "name": "update_vcdn_settings",
+      "description": "Update account-wide default Video CDN settings (all write-tested)."
+    },
+    {
+      "name": "delete_vcdn_resource",
+      "description": "Delete a Video CDN resource."
+    },
+    {
+      "name": "search_docs",
+      "description": "Search BlazingCDN documentation, how-to guides and product pages by keyword — e.g. 'image processing' returns the preset guide with the URL format and every pa…"
+    },
+    {
+      "name": "estimate_traffic_cost",
+      "description": "Estimate the monthly cost of CDN traffic on the pay-as-you-go Flex plan (progressive tiers from $5.00/TB down to $2.50/TB, $25/month minimum covering the first…"
+    }
   ]
 }
